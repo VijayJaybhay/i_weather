@@ -46,7 +46,9 @@ import 'package:numberpicker/numberpicker.dart';
 
 class LocationScreen extends StatefulWidget {
   WeatherData _weatherData;
+
   LocationScreen(this._weatherData);
+
   @override
   State<StatefulWidget> createState() {
     return _LocationScreenState();
@@ -56,15 +58,17 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
   WeatherInterpretation _weatherInterpretation = WeatherInterpretation();
 
-  int _selectedWeekDayValue = 3;
-  int _selectedHourValue = 1;
+  int _weekDayValue = 3;
+  int _hourValue = 1;
+  WeatherData _weatherData = null;
 
   @override
   void initState() {
     super.initState();
     DateTime dateTime = DateTime.now();
-    _selectedWeekDayValue = dateTime.weekday;
-    _selectedHourValue = dateTime.hour;
+    _weekDayValue = dateTime.weekday;
+    _hourValue = dateTime.hour;
+    _weatherData = widget._weatherData;
   }
 
   @override
@@ -89,7 +93,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 textAlign: TextAlign.center,
               ),
               Text(
-                'Katowice',
+                '${_weatherData.name}',
                 style: GoogleFonts.montserrat(
                   fontSize: 40.0,
                   color: Colors.white,
@@ -104,7 +108,8 @@ class _LocationScreenState extends State<LocationScreen> {
                   Expanded(
                     child: SvgPicture.string(
                       // Icon feather-cloud-rain
-                      '<svg viewBox="1.49 1.5 131.15 131.15" ><path transform="translate(66.95, 53.53)" d="M 24 19.5 L 24 67.18959808349609" fill="none" stroke="#ffffff" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" /><path transform="translate(31.26, 53.53)" d="M 12 19.5 L 12 67.18959808349609" fill="none" stroke="#ffffff" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" /><path transform="translate(49.1, 62.46)" d="M 18 22.5 L 18 70.18959808349609" fill="none" stroke="#ffffff" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" /><path transform="translate(0.0, 0.0)" d="M 114.7912063598633 94.37461090087891 C 127.7073440551758 88.71779632568359 134.892333984375 74.78404235839844 132.0107116699219 60.98106002807617 C 129.1290893554688 47.17809295654297 116.969352722168 37.28289413452148 102.8688125610352 37.26631164550781 L 95.35770416259766 37.26630401611328 C 90.16905212402344 17.1738109588623 72.58290100097656 2.742957353591919 51.86408233642578 1.576272964477539 C 31.14525604248047 0.4095881581306458 12.05020236968994 12.77490520477295 4.638657569885254 32.15788269042969 C -2.772883892059326 51.54085922241211 3.200557470321655 73.49172210693359 19.41203117370605 86.44622802734375" fill="none" stroke="#ffffff" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" /></svg>',
+                      _weatherInterpretation
+                          .getWeatherIcon(_weatherData.weather[0].id),
                       allowDrawingOutsideViewBox: true,
                     ),
                   ),
@@ -113,7 +118,7 @@ class _LocationScreenState extends State<LocationScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         NumberPicker(
-                          value: _selectedHourValue,
+                          value: _hourValue,
                           minValue: 0,
                           maxValue: 25,
                           axis: Axis.vertical,
@@ -129,7 +134,7 @@ class _LocationScreenState extends State<LocationScreen> {
                             return "$numberText:00";
                           },
                           onChanged: (value) =>
-                              setState(() => _selectedHourValue = value),
+                              setState(() => _hourValue = value),
                           decoration: BoxDecoration(
                             shape: BoxShape.rectangle,
                             borderRadius: BorderRadius.circular(16),
@@ -151,7 +156,7 @@ class _LocationScreenState extends State<LocationScreen> {
                       ),
                       children: [
                         TextSpan(
-                          text: '23',
+                          text: '${_weatherData.main.temp.toInt()}',
                           style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w600,
                           ),
@@ -167,9 +172,18 @@ class _LocationScreenState extends State<LocationScreen> {
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    'RAIN',
+                    '${_weatherData.weather[0].main}',
                     style: GoogleFonts.montserrat(
-                      fontSize: 15.0,
+                      fontSize: 18.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    '${_weatherData.weather[0].description.toUpperCase()}',
+                    style: GoogleFonts.montserrat(
+                      fontSize: 10.0,
                       color: Colors.white,
                       fontWeight: FontWeight.w300,
                     ),
@@ -185,7 +199,8 @@ class _LocationScreenState extends State<LocationScreen> {
                   ),
                   children: [
                     TextSpan(
-                      text: '22/26 ',
+                      text:
+                          '${_weatherData.main.tempMin.toInt()}/${_weatherData.main.tempMax.toInt()}',
                       style: GoogleFonts.montserrat(
                         fontWeight: FontWeight.w500,
                       ),
@@ -204,9 +219,9 @@ class _LocationScreenState extends State<LocationScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   NumberPicker(
-                    value: _selectedWeekDayValue,
+                    value: _weekDayValue,
                     minValue: 1,
-                    maxValue: 8,
+                    maxValue: 7,
                     axis: Axis.horizontal,
                     haptics: true,
                     zeroPad: true,
@@ -234,8 +249,7 @@ class _LocationScreenState extends State<LocationScreen> {
                       }
                       return "";
                     },
-                    onChanged: (value) =>
-                        setState(() => _selectedWeekDayValue = value),
+                    onChanged: (value) => setState(() => _weekDayValue = value),
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(16),

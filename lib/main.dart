@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:i_weather/model/weather_data.dart';
-import 'package:i_weather/screens/location_screen.dart';
+import 'package:i_weather/screens/loading_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LocationScreen(WeatherData()),
+      home: LoadingScreen(),
     );
   }
 }

@@ -18,7 +18,9 @@ class WeatherService {
       } else {
         print('Unable to fetch weather data');
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
     return null;
   }
 }
