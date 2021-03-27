@@ -56,8 +56,16 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
   WeatherInterpretation _weatherInterpretation = WeatherInterpretation();
 
-  int _currentValue = 3;
-  int _hourRangeSelectedValue = 1;
+  int _selectedWeekDayValue = 3;
+  int _selectedHourValue = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    DateTime dateTime = DateTime.now();
+    _selectedWeekDayValue = dateTime.weekday;
+    _selectedHourValue = dateTime.hour;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +113,7 @@ class _LocationScreenState extends State<LocationScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         NumberPicker(
-                          value: _hourRangeSelectedValue,
+                          value: _selectedHourValue,
                           minValue: 0,
                           maxValue: 25,
                           axis: Axis.vertical,
@@ -121,7 +129,7 @@ class _LocationScreenState extends State<LocationScreen> {
                             return "$numberText:00";
                           },
                           onChanged: (value) =>
-                              setState(() => _hourRangeSelectedValue = value),
+                              setState(() => _selectedHourValue = value),
                           decoration: BoxDecoration(
                             shape: BoxShape.rectangle,
                             borderRadius: BorderRadius.circular(16),
@@ -196,7 +204,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   NumberPicker(
-                    value: _currentValue,
+                    value: _selectedWeekDayValue,
                     minValue: 1,
                     maxValue: 8,
                     axis: Axis.horizontal,
@@ -226,7 +234,8 @@ class _LocationScreenState extends State<LocationScreen> {
                       }
                       return "";
                     },
-                    onChanged: (value) => setState(() => _currentValue = value),
+                    onChanged: (value) =>
+                        setState(() => _selectedWeekDayValue = value),
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(16),
