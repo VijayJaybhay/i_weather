@@ -114,6 +114,9 @@ class _LocationScreenState extends State<LocationScreen> {
                     _weatherInterpretation
                         .getWeatherIcon(_weatherData.weather[0].id),
                     allowDrawingOutsideViewBox: true,
+                    height: 128.0,
+                    width: 128.0,
+                    color: Colors.white,
                   ),
                 ),
                 Expanded(
